@@ -8,35 +8,36 @@ services:
   openvpn:
     image: 'jpbaking/cpto-openvpn:latest'
     build:
-      context: 'openvpn'
+      context: 'cpto-openvpn'
       dockerfile: 'openvpn.Dockerfile'
+    command: "${OPENVPN_CMD_ARGS}"
     cap_add:
     - 'NET_ADMIN'
     devices:
     - '/dev/net/tun'
     volumes:
-    - './.openvpn:/.openvpn:ro'
+    - '${OPENVPN_CONFIG_DIR}:/.openvpn:ro'
     restart: 'unless-stopped'
   tinyproxy:
     image: 'jpbaking/cpto-tinyproxy:latest'
     build:
-      context: 'tinyproxy'
+      context: 'cpto-tinyproxy'
       dockerfile: 'tinyproxy.Dockerfile'
     <<: *openvpn-network
   srelay:
     image: 'jpbaking/cpto-srelay:latest'
     build:
-      context: 'srelay'
+      context: 'cpto-srelay'
       dockerfile: 'srelay.Dockerfile'
     <<: *openvpn-network
   haproxy:
     image: 'jpbaking/cpto-haproxy:latest'
     build:
-      context: 'haproxy'
+      context: 'cpto-haproxy'
       dockerfile: 'haproxy.Dockerfile'
     ports:
-    - '0.0.0.0:23128:3128'
-    - '0.0.0.0:21080:1080'
+    - '0.0.0.0:${HTTP_PROXY_PORT}:3128'
+    - '0.0.0.0:${SOCKS_PROXY_PORT}:1080'
     depends_on:
     - 'openvpn'
     - 'tinyproxy'

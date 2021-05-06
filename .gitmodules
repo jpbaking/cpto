@@ -1,0 +1,3 @@
+[submodule "cpto-tinyproxy"]
+	path = cpto-tinyproxy
+	url = git@github.com:jpbaking/cpto-tinyproxy.git

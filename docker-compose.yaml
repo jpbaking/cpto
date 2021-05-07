@@ -1,9 +1,17 @@
 version: '2.4'
+x-common: &common
+  sysctls:
+  - 'net.core.somaxconn=4096'
+  restart: 'unless-stopped'
+x-dns: &dns
+  dns:
+  - '1.1.1.1'
+  - '1.0.0.1'
 x-openvpn-network: &openvpn-network
   depends_on:
   - 'openvpn'
   network_mode: 'service:openvpn'
-  restart: 'unless-stopped'
+  <<: *common
 services:
   openvpn:
     image: 'jpbaking/cpto-openvpn:latest'
@@ -17,7 +25,8 @@ services:
     - '/dev/net/tun'
     volumes:
     - '${OPENVPN_CONFIG_DIR}:/.openvpn:ro'
-    restart: 'unless-stopped'
+    <<: *dns
+    <<: *common
   tinyproxy:
     image: 'jpbaking/cpto-tinyproxy:latest'
     build:
@@ -42,4 +51,4 @@ services:
     - 'openvpn'
     - 'tinyproxy'
     - 'srelay'
-    restart: 'unless-stopped'
+    <<: *common

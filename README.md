@@ -4,9 +4,20 @@ Containerized HTTP/SOCKS Proxy Through OpenVPN
 
 ![PREVIEW](./.images/preview.png)
 
-This will expose HTTP/SOCKS proxy ports that forwards traffic through the OpenVPN client configured. Perfect for those that don't want/need to have the entier host machine be on the OpenVPN network.
+This will expose HTTP/SOCKS proxy ports that forwards traffic through the OpenVPN client configured. Perfect for those that don't want/need to have their entire host machine be on the OpenVPN network.
 
-> **WARNING**: This was made for educational purposes (and convenience). Please DO NOT USE for PRODUCTION or COMMERCIAL deployments.
+> **WARNING**: This project was made for educational purposes (and convenience). Please DO NOT USE for PRODUCTION or COMMERCIAL deployments.
+
+... also serves as demonstration of:
+- Non-typical `docker`/`docker-compose` (POD-like) networking _([official doc](https://docs.docker.com/compose/compose-file/compose-file-v2/#network_mode))_
+- YAML anchors in `docker-compose.yaml` _([guide by medium.com](https://medium.com/@kinghuang/docker-compose-anchors-aliases-extensions-a1e4105d70bd))_
+- Working with Alpine images _([official site](https://alpinelinux.org/about/) / [in docker hub](https://hub.docker.com/_/alpine))_
+- `docker` Multi-stage builds _([official doc](https://docs.docker.com/develop/develop-images/multistage-build/))_
+- Git submodules _([official doc](https://git-scm.com/book/en/v2/Git-Tools-Submodules))_
+- Oldie-but-Goodie (and tiny) open-source networking apps/tools:
+  - tinyproxy _([official site](http://tinyproxy.github.io/) / [github](https://github.com/tinyproxy/tinyproxy))_
+  - srelay _([official site](https://socks-relay.sourceforge.io/) / [sourceforge](https://sourceforge.net/p/socks-relay/srelay/ci/master/tree/))_
+  - haproxy _([official site](http://www.haproxy.org/) / [github](https://github.com/haproxy/haproxy))_
 
 # Usage
 

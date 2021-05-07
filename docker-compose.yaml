@@ -3,6 +3,11 @@ x-common: &common
   sysctls:
   - 'net.core.somaxconn=4096'
   restart: 'unless-stopped'
+  logging:
+    driver: 'json-file'
+    options:
+      max-file: '1'
+      max-size: '10m'
 x-dns: &dns
   dns:
   - '1.1.1.1'

@@ -91,6 +91,7 @@ Key cross-component rule (Compose): tinyproxy and srelay share openvpn's network
 ## Project Tooling
 
 - `.claude/commands/push-hub-readmes.md` — slash command (`/push-hub-readmes`) that authenticates with Docker Hub via stored credentials and pushes each container's `README.md` as the `full_description` for its Docker Hub repository
+- `.claude/commands/build-and-push.md` — slash command (`/build-and-push`) that builds all three images, tags with a `YYMMDDHHMM` timestamp if anything changed, and pushes both `:latest` and the timestamp tag to Docker Hub
 
 ## Child DOX Index
 

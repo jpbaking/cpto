@@ -6,8 +6,9 @@ SOCKS4/5 proxy daemon running inside the openvpn network namespace, so all proxi
 
 ## Ownership
 
-- `srelay.Dockerfile` — two-stage build: Alpine builder compiles srelay 0.4.8p3 from SourceForge tarball; runtime stage copies the binary
+- `srelay.Dockerfile` — two-stage build: Alpine builder compiles srelay 0.4.9 from SourceForge tarball; runtime stage copies the binary
 - `srelay.conf` — minimal accept-all config (`0.0.0.0 any`)
+- `README.md` — Docker Hub repository description for `jpbaking/cpto-srelay`
 
 ## Local Contracts
 

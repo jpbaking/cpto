@@ -21,14 +21,14 @@ Exposes HTTP and SOCKS proxy ports on your host that forward traffic through an 
       │
       ├──► [ tinyproxy :3128 ]  ─┐
       │                           ├─ both share openvpn's network namespace
-      └──► [ dante     :1080 ]  ─┘
+      └──► [ srelay     :1080 ]  ─┘
                                   │
                               [ openvpn ] ──► VPN / internet
 ```
 
 - **openvpn** — runs the VPN client; owns the network namespace
-- **tinyproxy** and **dante** — HTTP and SOCKS4/5 proxy daemons that run *inside* openvpn's network namespace, so all their traffic exits through the VPN
-- **haproxy** — the only service with published ports; proxies inbound connections to tinyproxy/dante via the openvpn service network
+- **tinyproxy** and **srelay** — HTTP and SOCKS4/5 proxy daemons that run *inside* openvpn's network namespace, so all their traffic exits through the VPN
+- **haproxy** — the only service with published ports; proxies inbound connections to tinyproxy/srelay via the openvpn service network
 
 Also demonstrates:
 - Pod-like container networking with `network_mode: service:` ([docs](https://docs.docker.com/compose/compose-file/compose-file-v2/#network_mode))
@@ -37,7 +37,7 @@ Also demonstrates:
 - Alpine-based images ([alpinelinux.org](https://alpinelinux.org/about/))
 - Lightweight open-source proxy tools:
   - **tinyproxy** — HTTP proxy ([site](http://tinyproxy.github.io/) / [github](https://github.com/tinyproxy/tinyproxy))
-  - **dante** — SOCKS4/5 proxy ([site](https://www.inet.no/dante/))
+  - **srelay** — SOCKS4/5 proxy ([site](https://socks-relay.sourceforge.io/))
   - **haproxy** — TCP load balancer / frontend ([site](http://www.haproxy.org/) / [github](https://github.com/haproxy/haproxy))
 
 ---

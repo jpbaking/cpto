@@ -48,11 +48,11 @@ services:
       dockerfile: tinyproxy.Dockerfile
     <<: *openvpn-network
 
-  dante:
-    image: jpbaking/cpto-dante:latest
+  srelay:
+    image: jpbaking/cpto-srelay:latest
     build:
-      context: dante
-      dockerfile: dante.Dockerfile
+      context: srelay
+      dockerfile: srelay.Dockerfile
     <<: *openvpn-network
 
   haproxy:
@@ -67,6 +67,6 @@ services:
         condition: service_healthy
       tinyproxy:
         condition: service_started
-      dante:
+      srelay:
         condition: service_started
     <<: *common

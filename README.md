@@ -102,3 +102,9 @@ IP through SOCKS5 Proxy (port: 1080): 222.222.222.222
 ```
 
 The two IPs should differ — your home WAN IP vs. the VPN exit IP.
+
+---
+
+## License
+
+[0BSD](LICENSE) — do whatever you want, no attribution required.

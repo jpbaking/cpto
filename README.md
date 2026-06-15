@@ -22,7 +22,7 @@ Exposes HTTP and SOCKS proxy ports that forward traffic through an OpenVPN clien
       ▼
   [ haproxy ]  ◄─── only container with published ports
       │
-      ├──► [ tinyproxy :3128 ]  ─┐
+      ├──► [ tinyproxy  :3128 ]  ─┐
       │                           ├─ both share openvpn's network namespace
       └──► [ srelay     :1080 ]  ─┘
                                   │

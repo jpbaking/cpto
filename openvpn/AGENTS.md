@@ -8,6 +8,7 @@ VPN client container. Owns the network namespace that tinyproxy and srelay run i
 
 - `openvpn.Dockerfile` — image definition (Alpine + openvpn package)
 - `entrypoint.sh` — pings `1.1.1.1` in a loop until reachable, then execs `openvpn $@`
+- `README.md` — Docker Hub repository description for `jpbaking/cpto-openvpn`
 
 ## Local Contracts
 

@@ -8,6 +8,7 @@ HTTP proxy daemon running inside the openvpn network namespace, so all proxied t
 
 - `tinyproxy.Dockerfile` — image definition (Alpine + tinyproxy package)
 - `tinyproxy.conf` — full tinyproxy configuration
+- `README.md` — Docker Hub repository description for `jpbaking/cpto-tinyproxy`
 
 ## Local Contracts
 

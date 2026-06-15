@@ -18,7 +18,8 @@ SOCKS4/5 proxy daemon running inside the openvpn network namespace, so all proxi
 
 ## Work Guidance
 
-- The tarball URL in `srelay.Dockerfile` points to a specific SourceForge mirror (`udomain.dl`); if the download fails during build, try a different mirror or host the tarball elsewhere
+- The tarball URL in `srelay.Dockerfile` points to `master.dl.sourceforge.net`; if the download fails during build, try a different SourceForge mirror or host the tarball elsewhere
+- `./configure` is invoked with `CFLAGS="-Wno-incompatible-pointer-types -Wno-int-conversion"` to suppress GCC 14+ errors caused by old C89-style function pointer typedefs and NULL-as-int initializers in srelay 0.4.9's source; do not remove these flags
 - `srelay.conf` line `0.0.0.0    any` means srelay accepts connections from any source IP and forwards to any destination — appropriate here because haproxy is the actual public-facing gatekeeper
 - Do not add a `WORKDIR` or user-specific config here; all runtime concerns belong in `.env`
 

@@ -11,10 +11,10 @@ data:
     Timeout 600
     DefaultErrorFile "/usr/share/tinyproxy/default.html"
     LogLevel Connect
-    MaxClients 1024
-    MinSpareServers 32
-    MaxSpareServers 1024
-    StartServers 64
+    MaxClients 100
+    MinSpareServers 5
+    MaxSpareServers 20
+    StartServers 10
     MaxRequestsPerChild 0
     ViaProxyName "tinyproxy"
   srelay.conf: |

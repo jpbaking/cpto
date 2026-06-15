@@ -31,9 +31,10 @@ Exposes HTTP and SOCKS proxy ports on your host that forward traffic through an 
 - **haproxy** — the only service with published ports; proxies inbound connections to tinyproxy/srelay via the openvpn service network
 
 Also demonstrates:
-- Pod-like container networking with `network_mode: service:` ([docs](https://docs.docker.com/compose/compose-file/compose-file-v2/#network_mode))
+- Pod-like container networking with `network_mode: service:` ([docs](https://docs.docker.com/reference/compose-file/services/#network_mode))
+- Service healthchecks and condition-based `depends_on` in Compose ([docs](https://docs.docker.com/reference/compose-file/services/#depends_on))
 - YAML anchors and aliases in `docker-compose.yaml` ([guide](https://medium.com/@kinghuang/docker-compose-anchors-aliases-extensions-a1e4105d70bd))
-- Docker multi-stage builds ([docs](https://docs.docker.com/develop/develop-images/multistage-build/))
+- Docker multi-stage builds ([docs](https://docs.docker.com/build/building/multi-stage/))
 - Alpine-based images ([alpinelinux.org](https://alpinelinux.org/about/))
 - Lightweight open-source proxy tools:
   - **tinyproxy** — HTTP proxy ([site](http://tinyproxy.github.io/) / [github](https://github.com/tinyproxy/tinyproxy))
@@ -72,7 +73,7 @@ Place your `.ovpn` config (and any credential files) in the directory pointed to
 
 ### Step 3 — Run
 
-Use `compose.sh` — a thin wrapper around `docker-compose` that always sets `--project-name=cpto`:
+Use `compose.sh` — a thin wrapper around `docker compose` that always sets `--project-name=cpto`:
 
 | Action | Command |
 |---|---|

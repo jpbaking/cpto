@@ -2,11 +2,10 @@
 
 **Containerized HTTP/SOCKS Proxy Through OpenVPN**
 
-![PREVIEW](./.images/preview.png)
 
 Exposes HTTP and SOCKS proxy ports on your host that forward traffic through an OpenVPN client running in a container. Ideal when you need selective VPN routing — only the traffic you explicitly proxy goes through the VPN; your host machine stays on its normal network.
 
-> **WARNING:** Made for personal/educational use. Do **not** use in production or commercial deployments.
+> **Educational / Experimental project.** This stack exists to explore Docker networking concepts — pod-like namespaces, multi-stage builds, and lightweight proxy tooling. It is not hardened, audited, or supported for production or commercial use. Run it in a controlled environment and treat all credentials as disposable.
 
 ---
 
@@ -22,14 +21,14 @@ Exposes HTTP and SOCKS proxy ports on your host that forward traffic through an 
       │
       ├──► [ tinyproxy :3128 ]  ─┐
       │                           ├─ both share openvpn's network namespace
-      └──► [ srelay    :1080 ]  ─┘
+      └──► [ dante     :1080 ]  ─┘
                                   │
                               [ openvpn ] ──► VPN / internet
 ```
 
 - **openvpn** — runs the VPN client; owns the network namespace
-- **tinyproxy** and **srelay** — HTTP and SOCKS5/4 proxy daemons that run *inside* openvpn's network namespace, so all their traffic exits through the VPN
-- **haproxy** — the only service with published ports; proxies inbound connections to tinyproxy/srelay via the openvpn service network
+- **tinyproxy** and **dante** — HTTP and SOCKS4/5 proxy daemons that run *inside* openvpn's network namespace, so all their traffic exits through the VPN
+- **haproxy** — the only service with published ports; proxies inbound connections to tinyproxy/dante via the openvpn service network
 
 Also demonstrates:
 - Pod-like container networking with `network_mode: service:` ([docs](https://docs.docker.com/compose/compose-file/compose-file-v2/#network_mode))
@@ -38,7 +37,7 @@ Also demonstrates:
 - Alpine-based images ([alpinelinux.org](https://alpinelinux.org/about/))
 - Lightweight open-source proxy tools:
   - **tinyproxy** — HTTP proxy ([site](http://tinyproxy.github.io/) / [github](https://github.com/tinyproxy/tinyproxy))
-  - **srelay** — SOCKS4/5 proxy ([site](https://socks-relay.sourceforge.io/))
+  - **dante** — SOCKS4/5 proxy ([site](https://www.inet.no/dante/))
   - **haproxy** — TCP load balancer / frontend ([site](http://www.haproxy.org/) / [github](https://github.com/haproxy/haproxy))
 
 ---

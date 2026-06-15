@@ -121,29 +121,29 @@ cd cpto
 #### Step 2 — Configure
 
 ```bash
-cp k8s-secret.example.yaml k8s-secret.yaml
+cp k8s/secret.example.yaml k8s/secret.yaml
 ```
 
-Edit `k8s-secret.yaml` and paste your `.ovpn` file contents (and credential files if needed). This file is gitignored.
+Edit `k8s/secret.yaml` and paste your `.ovpn` file contents (and credential files if needed). This file is gitignored.
 
 #### Step 3 — Apply
 
-`kube.sh` is a thin wrapper around `kubectl` that always sets `--namespace=cpto`:
+`k8s/kube.sh` is a thin wrapper around `kubectl` that always sets `--namespace=cpto`:
 
 ```bash
-kubectl apply -f k8s-namespace.yaml
-kubectl apply -f k8s-configmap.yaml
-kubectl apply -f k8s-secret.yaml
-./kube.sh apply -f k8s-deployment.yaml
-./kube.sh apply -f k8s-service.yaml
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/secret.yaml
+./k8s/kube.sh apply -f k8s/deployment.yaml
+./k8s/kube.sh apply -f k8s/service.yaml
 ```
 
 | Action | Command |
 |---|---|
-| Status | `./kube.sh get pods` |
-| Logs (openvpn) | `./kube.sh logs -l app=cpto -c openvpn -f` |
-| Scale | `./kube.sh scale deployment/cpto --replicas=3` |
-| Teardown | `./kube.sh delete -f k8s-deployment.yaml -f k8s-service.yaml` |
+| Status | `./k8s/kube.sh get pods` |
+| Logs (openvpn) | `./k8s/kube.sh logs -l app=cpto -c openvpn -f` |
+| Scale | `./k8s/kube.sh scale deployment/cpto --replicas=3` |
+| Teardown | `./k8s/kube.sh delete -f k8s/deployment.yaml -f k8s/service.yaml` |
 
 ---
 

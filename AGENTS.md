@@ -86,11 +86,16 @@ CPTO exposes HTTP and SOCKS proxy ports that route all proxied traffic through a
 
 Key cross-component rule (Compose): tinyproxy and srelay share openvpn's network namespace (`network_mode: service:openvpn`). Any port binding changes in those components must be reflected in `haproxy.cfg` and `docker-compose.yaml`.
 
-**Kubernetes** — same three proxy containers run as a multi-container Pod (network namespace shared natively). A Deployment with 3 replicas provides independent VPN tunnel groups; a NodePort Service replaces haproxy. Config in `k8s-configmap.yaml`; credentials in `k8s-secret.yaml` (gitignored; `k8s-secret.example.yaml` is the template). `kube.sh` wraps `kubectl` with `--namespace=cpto`.
+**Kubernetes** — same three proxy containers run as a multi-container Pod (network namespace shared natively). A Deployment with 3 replicas provides independent VPN tunnel groups; a NodePort Service replaces haproxy. All Kubernetes manifests and `kube.sh` live in `k8s/`. Config in `k8s/configmap.yaml`; credentials in `k8s/secret.yaml` (gitignored; `k8s/secret.example.yaml` is the template). `k8s/kube.sh` wraps `kubectl` with `--namespace=cpto`.
+
+## Project Tooling
+
+- `.claude/commands/push-hub-readmes.md` — slash command (`/push-hub-readmes`) that authenticates with Docker Hub via stored credentials and pushes each container's `README.md` as the `full_description` for its Docker Hub repository
 
 ## Child DOX Index
 
 - [`haproxy/AGENTS.md`](haproxy/AGENTS.md) — TCP frontend; published host ports; routes to tinyproxy and srelay via openvpn hostname
+- [`k8s/AGENTS.md`](k8s/AGENTS.md) — Kubernetes manifests and kube.sh wrapper; deployment, service, configmap, namespace, and secret template
 - [`openvpn/AGENTS.md`](openvpn/AGENTS.md) — VPN client; owns the shared network namespace; readiness check before tunnel start
 - [`srelay/AGENTS.md`](srelay/AGENTS.md) — SOCKS4/5 proxy; multi-stage build from source; runs in openvpn namespace
 - [`tinyproxy/AGENTS.md`](tinyproxy/AGENTS.md) — HTTP proxy; runs in openvpn namespace

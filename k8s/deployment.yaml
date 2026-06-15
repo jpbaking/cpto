@@ -4,7 +4,7 @@
 #   srelay    — SOCKS4/5 proxy on :1080, traffic exits through the tunnel
 #
 # Scaling replicas spins up independent groups, each with its own VPN tunnel.
-# The Service in k8s-service.yaml load-balances across all groups — no haproxy needed.
+# The Service in service.yaml load-balances across all groups — no haproxy needed.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

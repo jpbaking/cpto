@@ -5,9 +5,9 @@ RUN set -exvo pipefail; \
 
 RUN set -exvo pipefail; \
     mkdir /tmp/srelay; cd /tmp/srelay; \
-    wget -O srelay-src.tar.gz https://udomain.dl.sourceforge.net/project/socks-relay/socks-relay/srelay-0.4.8/srelay-0.4.8p3.tar.gz; \
+    wget -O srelay-src.tar.gz https://master.dl.sourceforge.net/project/socks-relay/socks-relay/srelay-0.4.9/srelay-0.4.9.tar.gz; \
     tar --strip-components=1 -zxvf srelay-src.tar.gz; \
-    ./configure && make;
+    ./configure CFLAGS="-Wno-incompatible-pointer-types -Wno-int-conversion" && make;
 
 FROM alpine:latest
 

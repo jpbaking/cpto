@@ -80,13 +80,17 @@ When the user requests a durable behavior change, record it here or in the relev
 
 ## Project Context
 
-CPTO is a docker-compose stack that exposes HTTP and SOCKS proxy ports on the host and routes all proxied traffic through a containerized OpenVPN client. Four services: openvpn (network namespace owner), tinyproxy (HTTP proxy), srelay (SOCKS4/5 proxy), haproxy (public TCP frontend). Runtime config lives in `.env` (gitignored); `.env.example` is the template. `compose.sh` wraps docker-compose with `--project-name=cpto`. `test.sh` verifies proxy routing end-to-end.
+CPTO exposes HTTP and SOCKS proxy ports that route all proxied traffic through a containerized OpenVPN client. It ships two runtime targets:
 
-Key cross-component rule: tinyproxy and srelay share openvpn's network namespace (`network_mode: service:openvpn`). Any port binding changes in those components must be reflected in `haproxy.cfg` and `docker-compose.yaml`.
+**Docker Compose** — four services: openvpn (network namespace owner), tinyproxy (HTTP proxy), srelay (SOCKS4/5 proxy), haproxy (public TCP frontend). Runtime config lives in `.env` (gitignored); `.env.example` is the template. `compose.sh` wraps `docker compose` with `--project-name=cpto`. `test.sh` verifies proxy routing end-to-end.
+
+Key cross-component rule (Compose): tinyproxy and srelay share openvpn's network namespace (`network_mode: service:openvpn`). Any port binding changes in those components must be reflected in `haproxy.cfg` and `docker-compose.yaml`.
+
+**Kubernetes** — same three proxy containers run as a multi-container Pod (network namespace shared natively). A Deployment with 3 replicas provides independent VPN tunnel groups; a NodePort Service replaces haproxy. Config in `k8s-configmap.yaml`; credentials in `k8s-secret.yaml` (gitignored; `k8s-secret.example.yaml` is the template). `kube.sh` wraps `kubectl` with `--namespace=cpto`.
 
 ## Child DOX Index
 
 - [`haproxy/AGENTS.md`](haproxy/AGENTS.md) — TCP frontend; published host ports; routes to tinyproxy and srelay via openvpn hostname
 - [`openvpn/AGENTS.md`](openvpn/AGENTS.md) — VPN client; owns the shared network namespace; readiness check before tunnel start
-- [`srelay/AGENTS.md`](srelay/AGENTS.md) — SOCKS4/5 proxy; single-stage Alpine apk install; runs in openvpn namespace
+- [`srelay/AGENTS.md`](srelay/AGENTS.md) — SOCKS4/5 proxy; multi-stage build from source; runs in openvpn namespace
 - [`tinyproxy/AGENTS.md`](tinyproxy/AGENTS.md) — HTTP proxy; runs in openvpn namespace

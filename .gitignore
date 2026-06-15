@@ -1,3 +1,4 @@
 .bin/
 .openvpn/
 .env
+k8s-secret.yaml

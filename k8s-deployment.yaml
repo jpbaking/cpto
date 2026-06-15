@@ -1,0 +1,96 @@
+# Each Pod is a self-contained VPN proxy group:
+#   openvpn  — establishes the tunnel; all containers share its network namespace
+#   tinyproxy — HTTP proxy on :3128, traffic exits through the tunnel
+#   srelay    — SOCKS4/5 proxy on :1080, traffic exits through the tunnel
+#
+# Scaling replicas spins up independent groups, each with its own VPN tunnel.
+# The Service in k8s-service.yaml load-balances across all groups — no haproxy needed.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpto
+  namespace: cpto
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cpto
+  template:
+    metadata:
+      labels:
+        app: cpto
+    spec:
+      securityContext:
+        sysctls:
+          - name: net.core.somaxconn
+            value: "4096"
+      volumes:
+        - name: tun-device
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+        - name: openvpn-config
+          secret:
+            secretName: cpto-openvpn
+        - name: proxy-config
+          configMap:
+            name: cpto-config
+      containers:
+        - name: openvpn
+          image: jpbaking/cpto-openvpn:latest
+          # args are passed verbatim to openvpn; paths resolve against /.openvpn
+          args: ["--config", "client.ovpn"]
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          volumeMounts:
+            - name: tun-device
+              mountPath: /dev/net/tun
+            - name: openvpn-config
+              mountPath: /.openvpn
+              readOnly: true
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "ip addr show tun0 2>/dev/null | grep -q 'inet '"]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "ip addr show tun0 2>/dev/null | grep -q 'inet '"]
+            initialDelaySeconds: 60
+            periodSeconds: 15
+
+        - name: tinyproxy
+          image: jpbaking/cpto-tinyproxy:latest
+          volumeMounts:
+            - name: proxy-config
+              mountPath: /etc/tinyproxy/tinyproxy.conf
+              subPath: tinyproxy.conf
+          readinessProbe:
+            tcpSocket:
+              port: 3128
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 3128
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+        - name: srelay
+          image: jpbaking/cpto-srelay:latest
+          volumeMounts:
+            - name: proxy-config
+              mountPath: /etc/srelay.conf
+              subPath: srelay.conf
+          readinessProbe:
+            tcpSocket:
+              port: 1080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 1080
+            initialDelaySeconds: 15
+            periodSeconds: 10

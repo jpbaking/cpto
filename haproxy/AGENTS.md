@@ -1,4 +1,4 @@
-# cpto-haproxy
+# haproxy
 
 ## Purpose
 
@@ -6,9 +6,7 @@ TCP frontend for the CPTO stack. The only service with published host ports. Rou
 
 ## Ownership
 
-- `haproxy.Dockerfile` — image definition (Alpine + haproxy package)
-- `haproxy.cfg` — frontend/backend config, timeouts, connection limits
-- `entrypoint.sh` — unused; Dockerfile invokes haproxy directly; can be removed
+- `haproxy.cfg` — frontend/backend config, timeouts, connection limits; mounted read-only into the `haproxy:alpine` image at `/usr/local/etc/haproxy/haproxy.cfg`
 
 ## Local Contracts
 
@@ -23,8 +21,7 @@ TCP frontend for the CPTO stack. The only service with published host ports. Rou
 - Backend addresses (`openvpn:3128`, `openvpn:1080`) must stay in sync with what tinyproxy/srelay actually bind
 - `timeout connect 3s` is intentionally short; `timeout server/client 10m` accommodates long-lived proxy connections
 - `maxconn 10240` is set both globally and in defaults; change both if tuning
-- `entrypoint.sh` references `/root/haproxy.cfg` which does not match the Dockerfile's copy target (`/etc/haproxy/haproxy.cfg`); do not wire it up without fixing the path mismatch first
 
 ## Verification
 
-- `./compose.sh up --build` then `./test.sh` — both proxy ports must return a VPN exit IP different from the home WAN IP
+- `./compose.sh up` then `./test.sh` — both proxy ports must return a VPN exit IP different from the home WAN IP

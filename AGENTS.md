@@ -86,7 +86,7 @@ Key cross-component rule: tinyproxy and srelay share openvpn's network namespace
 
 ## Child DOX Index
 
-- [`cpto-haproxy/AGENTS.md`](cpto-haproxy/AGENTS.md) — TCP frontend; published host ports; routes to tinyproxy and srelay via openvpn hostname
-- [`cpto-openvpn/AGENTS.md`](cpto-openvpn/AGENTS.md) — VPN client; owns the shared network namespace; readiness check before tunnel start
-- [`cpto-srelay/AGENTS.md`](cpto-srelay/AGENTS.md) — SOCKS4/5 proxy; multi-stage build from source; runs in openvpn namespace
-- [`cpto-tinyproxy/AGENTS.md`](cpto-tinyproxy/AGENTS.md) — HTTP proxy; runs in openvpn namespace
+- [`haproxy/AGENTS.md`](haproxy/AGENTS.md) — TCP frontend; published host ports; routes to tinyproxy and srelay via openvpn hostname
+- [`openvpn/AGENTS.md`](openvpn/AGENTS.md) — VPN client; owns the shared network namespace; readiness check before tunnel start
+- [`srelay/AGENTS.md`](srelay/AGENTS.md) — SOCKS4/5 proxy; multi-stage build from source; runs in openvpn namespace
+- [`tinyproxy/AGENTS.md`](tinyproxy/AGENTS.md) — HTTP proxy; runs in openvpn namespace

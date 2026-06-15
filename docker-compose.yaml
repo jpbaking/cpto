@@ -21,7 +21,7 @@ services:
   openvpn:
     image: 'jpbaking/cpto-openvpn:latest'
     build:
-      context: 'cpto-openvpn'
+      context: 'openvpn'
       dockerfile: 'openvpn.Dockerfile'
     command: "${OPENVPN_CMD_ARGS}"
     cap_add:
@@ -35,20 +35,19 @@ services:
   tinyproxy:
     image: 'jpbaking/cpto-tinyproxy:latest'
     build:
-      context: 'cpto-tinyproxy'
+      context: 'tinyproxy'
       dockerfile: 'tinyproxy.Dockerfile'
     <<: *openvpn-network
   srelay:
     image: 'jpbaking/cpto-srelay:latest'
     build:
-      context: 'cpto-srelay'
+      context: 'srelay'
       dockerfile: 'srelay.Dockerfile'
     <<: *openvpn-network
   haproxy:
-    image: 'jpbaking/cpto-haproxy:latest'
-    build:
-      context: 'cpto-haproxy'
-      dockerfile: 'haproxy.Dockerfile'
+    image: 'haproxy:alpine'
+    volumes:
+    - './haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro'
     ports:
     - '0.0.0.0:${HTTP_PROXY_PORT}:3128'
     - '0.0.0.0:${SOCKS_PROXY_PORT}:1080'

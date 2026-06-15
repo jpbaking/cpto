@@ -1,4 +1,4 @@
-# cpto-tinyproxy
+# tinyproxy
 
 ## Purpose
 

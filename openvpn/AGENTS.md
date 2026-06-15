@@ -1,4 +1,4 @@
-# cpto-openvpn
+# openvpn
 
 ## Purpose
 

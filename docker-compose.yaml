@@ -16,7 +16,7 @@ x-dns: &dns
 x-openvpn-network: &openvpn-network
   depends_on:
     openvpn:
-      condition: service_healthy
+      condition: service_started
   network_mode: service:openvpn
   <<: *common
 
@@ -33,12 +33,6 @@ services:
       - /dev/net/tun
     volumes:
       - ${OPENVPN_CONFIG_DIR}:/.openvpn:ro
-    healthcheck:
-      test: ["CMD-SHELL", "ip addr show tun0 2>/dev/null | grep -q 'inet '"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
     <<: [*dns, *common]
 
   tinyproxy:
@@ -64,7 +58,7 @@ services:
       - 0.0.0.0:${SOCKS_PROXY_PORT}:1080
     depends_on:
       openvpn:
-        condition: service_healthy
+        condition: service_started
       tinyproxy:
         condition: service_started
       srelay:

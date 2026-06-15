@@ -1,6 +1,6 @@
 # CPTO
 
-**Containerized HTTP/SOCKS Proxy Through OpenVPN**
+*Hands-on Docker experiments: shared network namespaces and multi-stage builds, demonstrated through a VPN-routed proxy stack*
 
 
 Exposes HTTP and SOCKS proxy ports on your host that forward traffic through an OpenVPN client running in a container. Ideal when you need selective VPN routing — only the traffic you explicitly proxy goes through the VPN; your host machine stays on its normal network.
@@ -30,7 +30,7 @@ Exposes HTTP and SOCKS proxy ports on your host that forward traffic through an 
 - **tinyproxy** and **srelay** — HTTP and SOCKS4/5 proxy daemons that run *inside* openvpn's network namespace, so all their traffic exits through the VPN
 - **haproxy** — the only service with published ports; proxies inbound connections to tinyproxy/srelay via the openvpn service network
 
-Also demonstrates:
+Built as a playground for these Docker and Compose patterns:
 - Pod-like container networking with `network_mode: service:` ([docs](https://docs.docker.com/reference/compose-file/services/#network_mode))
 - Service healthchecks and condition-based `depends_on` in Compose ([docs](https://docs.docker.com/reference/compose-file/services/#depends_on))
 - YAML anchors and aliases in `docker-compose.yaml` ([guide](https://medium.com/@kinghuang/docker-compose-anchors-aliases-extensions-a1e4105d70bd))

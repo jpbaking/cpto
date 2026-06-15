@@ -1,58 +1,72 @@
-version: '2.4'
 x-common: &common
   sysctls:
-  - 'net.core.somaxconn=4096'
-  restart: 'unless-stopped'
+    - net.core.somaxconn=4096
+  restart: unless-stopped
   logging:
-    driver: 'json-file'
+    driver: json-file
     options:
-      max-file: '1'
-      max-size: '10m'
+      max-file: "1"
+      max-size: 10m
+
 x-dns: &dns
   dns:
-  - '1.1.1.1'
-  - '1.0.0.1'
+    - 1.1.1.1
+    - 1.0.0.1
+
 x-openvpn-network: &openvpn-network
   depends_on:
-  - 'openvpn'
-  network_mode: 'service:openvpn'
+    openvpn:
+      condition: service_healthy
+  network_mode: service:openvpn
   <<: *common
+
 services:
   openvpn:
-    image: 'jpbaking/cpto-openvpn:latest'
+    image: jpbaking/cpto-openvpn:latest
     build:
-      context: 'openvpn'
-      dockerfile: 'openvpn.Dockerfile'
-    command: "${OPENVPN_CMD_ARGS}"
+      context: openvpn
+      dockerfile: openvpn.Dockerfile
+    command: ${OPENVPN_CMD_ARGS}
     cap_add:
-    - 'NET_ADMIN'
+      - NET_ADMIN
     devices:
-    - '/dev/net/tun'
+      - /dev/net/tun
     volumes:
-    - '${OPENVPN_CONFIG_DIR}:/.openvpn:ro'
-    <<: *dns
-    <<: *common
+      - ${OPENVPN_CONFIG_DIR}:/.openvpn:ro
+    healthcheck:
+      test: ["CMD-SHELL", "ip addr show tun0 2>/dev/null | grep -q 'inet '"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    <<: [*dns, *common]
+
   tinyproxy:
-    image: 'jpbaking/cpto-tinyproxy:latest'
+    image: jpbaking/cpto-tinyproxy:latest
     build:
-      context: 'tinyproxy'
-      dockerfile: 'tinyproxy.Dockerfile'
+      context: tinyproxy
+      dockerfile: tinyproxy.Dockerfile
     <<: *openvpn-network
-  srelay:
-    image: 'jpbaking/cpto-srelay:latest'
+
+  dante:
+    image: jpbaking/cpto-dante:latest
     build:
-      context: 'srelay'
-      dockerfile: 'srelay.Dockerfile'
+      context: dante
+      dockerfile: dante.Dockerfile
     <<: *openvpn-network
+
   haproxy:
-    image: 'haproxy:alpine'
+    image: haproxy:alpine
     volumes:
-    - './haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro'
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     ports:
-    - '0.0.0.0:${HTTP_PROXY_PORT}:3128'
-    - '0.0.0.0:${SOCKS_PROXY_PORT}:1080'
+      - 0.0.0.0:${HTTP_PROXY_PORT}:3128
+      - 0.0.0.0:${SOCKS_PROXY_PORT}:1080
     depends_on:
-    - 'openvpn'
-    - 'tinyproxy'
-    - 'srelay'
+      openvpn:
+        condition: service_healthy
+      tinyproxy:
+        condition: service_started
+      dante:
+        condition: service_started
     <<: *common

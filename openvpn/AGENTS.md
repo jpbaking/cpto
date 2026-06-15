@@ -2,7 +2,7 @@
 
 ## Purpose
 
-VPN client container. Owns the network namespace that tinyproxy and srelay run inside (`network_mode: service:openvpn`), so all proxy traffic exits through the VPN tunnel. Waits for internet reachability before starting the openvpn process.
+VPN client container. Owns the network namespace that tinyproxy and dante run inside (`network_mode: service:openvpn`), so all proxy traffic exits through the VPN tunnel. Waits for internet reachability before starting the openvpn process.
 
 ## Ownership
 
@@ -15,7 +15,7 @@ VPN client container. Owns the network namespace that tinyproxy and srelay run i
 - User config directory is volume-mounted read-only at `/.openvpn`; this is also the working directory, so relative paths in `.ovpn` files resolve there
 - `OPENVPN_CMD_ARGS` is passed as the container `command` and forwarded to `openvpn` verbatim
 - DNS is set to `1.1.1.1` / `1.0.0.1` at compose level to ensure resolution before tunnel is up
-- tinyproxy and srelay join this container's network namespace and bind on `:3128` and `:1080` respectively — haproxy reaches them via the `openvpn` hostname
+- tinyproxy and dante join this container's network namespace and bind on `:3128` and `:1080` respectively — haproxy reaches them via the `openvpn` hostname
 
 ## Work Guidance
 

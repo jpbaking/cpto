@@ -5,6 +5,8 @@
 
 Exposes HTTP and SOCKS proxy ports on your host that forward traffic through an OpenVPN client running in a container. Ideal when you need selective VPN routing — only the traffic you explicitly proxy goes through the VPN; your host machine stays on its normal network.
 
+**CPTO** started as *Containerized HTTP/SOCKS Proxy Through OpenVPN*, later shortened to *Containerized Proxy Through OpenVPN*. The name stuck; the focus shifted from the proxy use case to the Docker patterns underneath it.
+
 > **Educational / Experimental project.** This stack exists to explore Docker networking concepts — pod-like namespaces, multi-stage builds, and lightweight proxy tooling. It is not hardened, audited, or supported for production or commercial use. Run it in a controlled environment and treat all credentials as disposable.
 
 ---

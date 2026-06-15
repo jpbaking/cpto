@@ -54,25 +54,22 @@ cd cpto
 
 ### Step 2 — Configure
 
-Edit `.env` to match your OpenVPN setup:
+Copy the example env file and edit it to match your OpenVPN setup:
 
 ```bash
-# Directory containing your OpenVPN client config (mounted read-only into the container).
-# Leave as-is if you're passing everything via OPENVPN_CMD_ARGS.
-OPENVPN_CONFIG_DIR="./.openvpn"
-
-# Arguments passed directly to the openvpn command.
-# Working directory inside the container is the mounted OPENVPN_CONFIG_DIR.
-OPENVPN_CMD_ARGS="--config client.ovpn --auth-user-pass client.pass --auth-nocache --remote-random"
-
-# Host port for HTTP proxy (tinyproxy)
-HTTP_PROXY_PORT="3128"
-
-# Host port for SOCKS4/5 proxy (srelay)
-SOCKS_PROXY_PORT="1080"
+cp .env.example .env
 ```
 
-Put your `.ovpn` config file (and any credential files) into the directory specified by `OPENVPN_CONFIG_DIR`.
+Key variables in `.env`:
+
+| Variable | Default | Description |
+|---|---|---|
+| `OPENVPN_CONFIG_DIR` | `./.openvpn` | Local directory with your `.ovpn` file and any credential files; mounted read-only into the container |
+| `OPENVPN_CMD_ARGS` | *(see example)* | Arguments passed verbatim to `openvpn`; relative paths resolve against `OPENVPN_CONFIG_DIR` |
+| `HTTP_PROXY_PORT` | `3128` | Host port for HTTP proxy |
+| `SOCKS_PROXY_PORT` | `1080` | Host port for SOCKS4/5 proxy |
+
+Place your `.ovpn` config (and any credential files) in the directory pointed to by `OPENVPN_CONFIG_DIR` before starting.
 
 ### Step 3 — Run
 

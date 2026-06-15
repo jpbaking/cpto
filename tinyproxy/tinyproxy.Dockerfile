@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN set -xv; \
+RUN set -exvo pipefail; \
     apk --update add --no-cache tinyproxy;
 
 COPY ./tinyproxy.conf /etc/tinyproxy/tinyproxy.conf
